@@ -7,9 +7,12 @@ public class Controller : MonoBehaviour {
     public static float playerRunningSpeed = 4.0f;
     public static float playerWalkingSpeed = 2.0f;
 
-	
+	public GameObject firstPersonCam;
+	public GameObject thirdPersonCam;
+	public GameObject currentCam;
     void Start () {
         Player1 = GameObject.Find("Player1");
+		InitCameras();
     }
 	
 	
@@ -40,5 +43,41 @@ public class Controller : MonoBehaviour {
             Player1.transform.Translate(Time.deltaTime * playerWalkingSpeed, 0.0f, 0.0f);
         }
     }
+	
+	void InitCameras()
+	{
+		firstPersonCam = GameObject.Find("FirstPersonCam");
+		thirdPersonCam = GameObject.Find("ThirdPersonCam");
+		currentCam = thirdPersonCam;
+		
+		firstPersonCam.GetComponent<Camera>().enabled = false;
+		firstPersonCam.GetComponent<AudioListener>().enabled = false;
+		
+		currentCam.GetComponent<Camera>().enabled = true;
+		currentCam.GetComponent<AudioListener>().enabled = true;
+	}
+	
+	void SwitchCamera()
+	{
+		if(Input.GetKeyDown(KeyCode.F1))
+		{
+			if(currentCam == firstPersonCam){
+				currentCam = thirdPersonCam;
+				currentCam.GetComponent<Camera>().enabled = true;
+				currentCam.GetComponent<AudioListener>().enabled = true;
+				
+				firstPersonCam.GetComponent<Camera>().enabled = false;
+				firstPersonCam.GetComponent<AudioListener>().enabled = false;
+			}
+			else{
+				currentCam = firstPersonCam;
+				currentCam.GetComponent<Camera>().enabled = true;
+				currentCam.GetComponent<AudioListener>().enabled = true;
+				
+				thirdPersonCam.GetComponent<Camera>().enabled = false;
+				thirdPersonCam.GetComponent<AudioListener>().enabled = false;
+			}
+		}
+	}
 
 }
